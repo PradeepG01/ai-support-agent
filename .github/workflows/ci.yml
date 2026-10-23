@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: agent
+          POSTGRES_PASSWORD: agent
+          POSTGRES_DB: agent
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U agent" --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+      - name: Lint
+        run: ruff check .
+      - name: Unit and API tests
+        run: pytest -q
+      - name: Agent evals (blocks merges that regress quality)
+        run: python -m evals.run_evals --min-pass-rate 0.9
+      - name: Smoke test against PostgreSQL
+        env:
+          DATABASE_URL: postgresql+psycopg://agent:agent@localhost:5432/agent
+        run: |
+          uvicorn app.main:app --port 8000 &
+          sleep 5
+          curl --fail http://localhost:8000/health
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ai-support-agent:${{ github.sha }} .

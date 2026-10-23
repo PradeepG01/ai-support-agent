@@ -1,0 +1,20 @@
+[
+  {"id": "checkin-time", "input": "What time is check-in?", "expect_tool": null, "expect_in_reply": ["2:00 PM"], "expect_source": "hotel-policies"},
+  {"id": "checkout-late", "input": "Can I get a late check-out and how much does it cost?", "expect_tool": null, "expect_in_reply": ["1,500"], "expect_source": "hotel-policies"},
+  {"id": "cancel-policy", "input": "What is your cancellation policy?", "expect_tool": null, "expect_in_reply": ["48 hours"], "expect_source": "hotel-policies"},
+  {"id": "id-docs", "input": "Which identity documents do I need at check-in?", "expect_tool": null, "expect_in_reply": ["ID"], "expect_source": "hotel-policies"},
+  {"id": "pets", "input": "Are pets allowed in the rooms?", "expect_tool": null, "expect_in_reply": ["pets"], "expect_source": "hotel-policies"},
+  {"id": "payments", "input": "Do you accept UPI payments?", "expect_tool": null, "expect_in_reply": ["UPI"], "expect_source": "hotel-policies"},
+  {"id": "breakfast", "input": "When is breakfast served?", "expect_tool": null, "expect_in_reply": ["7:00 AM"], "expect_source": "amenities"},
+  {"id": "pool-hours", "input": "What are the swimming pool hours?", "expect_tool": null, "expect_in_reply": ["6:00 AM"], "expect_source": "amenities"},
+  {"id": "wifi", "input": "How do I connect to the wifi network?", "expect_tool": null, "expect_in_reply": ["SeasideGuest"], "expect_source": "amenities"},
+  {"id": "airport", "input": "How much is an airport transfer?", "expect_tool": null, "expect_in_reply": ["1,800"], "expect_source": "amenities"},
+  {"id": "parking", "input": "Is there parking and EV charging?", "expect_tool": null, "expect_in_reply": ["parking"], "expect_source": "amenities"},
+  {"id": "booking-found", "input": "Can you check my booking SG1234?", "expect_tool": "lookup_booking", "expect_in_reply": ["SG1234", "Deluxe"], "expect_source": null},
+  {"id": "booking-pending", "input": "status of reservation sg5678 please", "expect_tool": "lookup_booking", "expect_in_reply": ["pending_payment"], "expect_source": null},
+  {"id": "booking-missing", "input": "Where is my booking AB9999?", "expect_tool": "lookup_booking", "expect_in_reply": ["couldn't find"], "expect_source": null},
+  {"id": "maintenance", "input": "The AC in my room is not working and it is very hot", "expect_tool": "create_ticket", "expect_in_reply": ["ticket"], "expect_source": null},
+  {"id": "refund", "input": "I was overcharged on my bill and want a refund", "expect_tool": "create_ticket", "expect_in_reply": ["ticket"], "expect_source": null},
+  {"id": "human", "input": "I want to speak to a real person now", "expect_tool": "escalate_to_human", "expect_in_reply": ["team"], "expect_source": null},
+  {"id": "out-of-scope", "input": "Who won the cricket match yesterday?", "expect_tool": null, "expect_in_reply": ["not sure"], "expect_source": null}
+]

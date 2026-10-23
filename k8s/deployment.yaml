@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-support-agent
+  labels: {app: ai-support-agent}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: ai-support-agent}
+  template:
+    metadata:
+      labels: {app: ai-support-agent}
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/your-github-username/ai-support-agent:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef: {name: ai-support-agent-secrets}  # DATABASE_URL, API keys, WEBHOOK_SECRET
+          resources:
+            requests: {cpu: 100m, memory: 256Mi}
+            limits: {cpu: 500m, memory: 512Mi}
+          readinessProbe:
+            httpGet: {path: /health, port: 8000}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8000}
+            initialDelaySeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-support-agent
+spec:
+  selector: {app: ai-support-agent}
+  ports:
+    - port: 80
+      targetPort: 8000
